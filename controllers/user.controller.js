@@ -63,3 +63,19 @@ exports.loginFunction = async (req,res)=>{
 
     return res.json({status: "welcome to website", data: session})
 }
+
+
+
+
+exports.homeFunction = async (req, res)=>{
+    // is user have data in req.user ❌✅
+    const userData = req.user
+
+    // is user data available ❌✅
+    if(!userData){
+        return res.status(401).json({error: "you are not logged in"})
+    }
+
+    // all information from userData (combine table information)
+    return res.status(200).json({status: "Here is you data", data: userData})
+}
