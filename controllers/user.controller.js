@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 
 // -----------------------------------------------  Sign-up 
 exports.signupFunction = async (req, res)=>{
+  try {
     const {username, email, password} = req.body
 
     // find email in DB
@@ -27,6 +28,10 @@ exports.signupFunction = async (req, res)=>{
     }).returning({id: userTable.id})
 
     return res.status(201).json({status: "Account Created", data: result})
+
+  } catch (error) {
+    return res.status(500).json({error: "Internal Server Error"})
+  }
 }
 
 
@@ -34,12 +39,13 @@ exports.signupFunction = async (req, res)=>{
 
 // -----------------------------------------------  Log-in
 exports.loginFunction = async (req,res)=>{
+try {
     const {email, password} =  req.body
 
     // email checking into database
     const [existingUser] = await db.select().from(userTable).where(eq(userTable.email, email))
     if(!existingUser){
-        return res.status(400).json({error: `user with this email ${email} does not exist`})
+        return res.status(400).json({error: `user with this email does not exist`})
     }
     
     // password checking from bcrypt
@@ -72,22 +78,31 @@ exports.loginFunction = async (req,res)=>{
     })
 
     return res.json({status: "welcome to website"})
+
+} catch (error) {
+    return res.status(500).json({error: "Internal Server Error"})
+}
 }
 
 
 
 // -----------------------------------------------  Home
 exports.homeFunction = async (req, res)=>{
-    // is user have data in req.user ❌✅
-    const userData = req.user //null, data
+    try {
+        // is user have data in req.user ❌✅
+        const userData = req.user //null, data
 
-    // is user data available ❌✅
-    if(!userData){
-        return res.status(401).json({error: "you are not logged in"})
+        // is user data available ❌✅
+        if(!userData){
+            return res.status(401).json({error: "you are not logged in"})
+        }
+
+        // all information from userData (combine table information)
+        return res.status(200).json({status: "Here is you data", data: userData})
+
+    } catch (error) {
+        return res.status(500).json({error: "Internal Server Error"})
     }
-
-    // all information from userData (combine table information)
-    return res.status(200).json({status: "Here is you data", data: userData})
 }
 
 
@@ -95,6 +110,7 @@ exports.homeFunction = async (req, res)=>{
 
 // -----------------------------------------------  Logout
 exports.logoutFunction = async (req, res)=>{
+try {
     const sessionId = req.cookies.sessionId
 
     // update session status to false
@@ -106,4 +122,8 @@ exports.logoutFunction = async (req, res)=>{
 
     res.clearCookie("sessionId")
     return res.status(200).json({status : "logged out !"})
+
+} catch (error) {
+    return res.status(500).json({error: "Internal Server Error"})
+}
 }
