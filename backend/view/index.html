@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Tester</title>
+
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            background: gray;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 40px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+
+        .endpoint {
+            background: #fafafa;
+            border: 1px solid #e1e1e1;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            transition: transform 0.2s ease;
+        }
+
+        .endpoint:hover {
+            transform: scale(1.01);
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            color: #34495e;
+            margin-top: 0;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 15px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 4px rgba(0,123,255,0.4);
+        }
+
+        button {
+            padding: 12px 18px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            transition: background 0.25s ease, transform 0.1s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        pre {
+            background-color: #1e1e1e;
+            color: #00ff88;
+            padding: 12px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>API Tester</h1>
+
+        <!-- Signup -->
+        <div class="endpoint">
+            <h2>Signup (POST /signup)</h2>
+            <form id="signupForm">
+                <label for="signupUsername">Username:</label>
+                <input type="text" id="signupUsername" name="username" required>
+
+                <label for="signupEmail">Email:</label>
+                <input type="email" id="signupEmail" name="email" required>
+
+                <label for="signupPassword">Password:</label>
+                <input type="password" id="signupPassword" name="password" required>
+
+                <button type="submit">Sign Up</button>
+            </form>
+            <h3>Response:</h3>
+            <pre id="signupResponse"></pre>
+        </div>
+
+        <!-- Login -->
+        <div class="endpoint">
+            <h2>Login (POST /login)</h2>
+            <form id="loginForm">
+                <label for="loginEmail">Email:</label>
+                <input type="email" id="loginEmail" name="email" required>
+
+                <label for="loginPassword">Password:</label>
+                <input type="password" id="loginPassword" name="password" required>
+
+                <button type="submit">Log In</button>
+            </form>
+            <h3>Response:</h3>
+            <pre id="loginResponse"></pre>
+        </div>
+
+        <!-- Home -->
+        <div class="endpoint">
+            <h2>Home (GET /home)</h2>
+            <button id="homeButton">Get Home</button>
+            <h3>Response:</h3>
+            <pre id="homeResponse"></pre>
+        </div>
+
+        <!-- Logout -->
+        <div class="endpoint">
+            <h2>Logout (POST /logout)</h2>
+            <button id="logoutButton">Log Out</button>
+            <h3>Response:</h3>
+            <pre id="logoutResponse"></pre>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://127.0.0.1:3000/user';
+
+        // Signup
+        document.getElementById('signupForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/signup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                    credentials: "include"
+                });
+                const result = await response.json();
+                document.getElementById('signupResponse').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('signupResponse').textContent = `Error: ${error.message}`;
+            }
+        });
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                    credentials: "include"
+                });
+                const result = await response.json();
+                document.getElementById('loginResponse').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('loginResponse').textContent = `Error: ${error.message}`;
+            }
+        });
+
+        // Home
+        document.getElementById('homeButton').addEventListener('click', async function () {
+            try {
+                const response = await fetch(`${API_BASE_URL}/home`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: "include"
+                });
+                const result = await response.json();
+                document.getElementById('homeResponse').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('homeResponse').textContent = `Error: ${error.message}`;
+            }
+        });
+
+        // Logout
+        document.getElementById('logoutButton').addEventListener('click', async function () {
+            try {
+                const response = await fetch(`${API_BASE_URL}/logout`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: "include"
+                });
+                const result = await response.json();
+                document.getElementById('logoutResponse').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('logoutResponse').textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,3 +1,4 @@
+// middlewares\rateLimit.middleware.js
 const rateLimit = require("express-rate-limit")
 
 exports.loginLimiterMiddleware = rateLimit({

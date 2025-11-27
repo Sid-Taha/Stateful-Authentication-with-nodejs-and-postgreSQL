@@ -1,3 +1,4 @@
+// middlewares\user.validation.middleware.js
 const {signupSchema, loginSchema} = require("../validators/user.validationSchema")
 
 // -------------------------------------------------------- Sign-up

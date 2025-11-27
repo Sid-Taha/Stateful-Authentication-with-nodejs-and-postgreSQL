@@ -1,3 +1,4 @@
+// index.js
 const express = require('express');
 const userRouter = require("./routes/user.routes")
 const cookieParser = require('cookie-parser')
@@ -12,9 +13,9 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use(cors({
-    origin: ["http://localhost:00000"],
-    credentials: true // Allow the cookies to be sent
-})) 
+    origin: "http://localhost:3001",
+    credentials: true, // Allow the cookies to be sent
+}))     
 
 
 app.use(helmet({

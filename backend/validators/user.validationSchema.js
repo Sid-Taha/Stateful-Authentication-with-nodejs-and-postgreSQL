@@ -1,3 +1,4 @@
+// validators\user.validationSchema.js
 const {z} = require("zod")
 
 // --------------------------------------------------- Sign-Up

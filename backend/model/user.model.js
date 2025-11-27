@@ -1,3 +1,4 @@
+// model\user.model.js
 const {pgTable, uuid, varchar, text, timestamp, boolean} = require("drizzle-orm/pg-core")
 
 exports.userTable = pgTable("users", {

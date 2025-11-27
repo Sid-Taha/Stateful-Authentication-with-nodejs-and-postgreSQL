@@ -1,3 +1,4 @@
+// routes\user.routes.js
 const express = require("express")
 const {signupFunction, loginFunction, homeFunction, logoutFunction} = require("../controllers/user.controller")
 const {sessionCheckMiddleware} = require("../middlewares/sessionCheck.middleware")
